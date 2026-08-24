@@ -9,9 +9,9 @@ This repo is the source of truth for:
 - `docker compose` that builds the four sibling microservices
 - [`render.yaml`](render.yaml) Blueprint for deploying those services on Render
 
-Postgres is **not** run here (locally or on Render). Point `DATABASE_URL` at your external PostGIS instance.
+Postgres / CockroachDB is **not** run here (locally or on Render). Set `DATABASE_URL` to your cluster URI.
 
-Postgres is **not** run here. Point `DATABASE_URL` at your external PostGIS instance.
+CockroachDB Cloud requires its CA certificate. The Core API reads it from `DATABASE_CA_CERT` (PEM text, for Render) or `DATABASE_CA_CERT_PATH` (local file, usually `~/.postgresql/root.crt`). `CREATE EXTENSION postgis` is skipped on Cockroach; spatial `geography` columns are built-in.
 
 Application code lives in the sibling repos. Generated gRPC stubs are committed inside those repos so they still build on their own. After changing a `.proto` file, regenerate with `make proto`.
 
@@ -64,11 +64,11 @@ Typical `type` values: `deploy_survey`, `emergency_survey`, `notify`. Microservi
 ## Run the stack
 
 ```bash
-cp .env.example .env   # set DATABASE_URL to your PostGIS URI
+cp .env.example .env   # set DATABASE_URL and DATABASE_CA_CERT
 docker compose up --build
 ```
 
-The Core API must be able to reach that database (PostGIS extension required). Compose fails fast if `DATABASE_URL` is unset.
+Compose fails fast if `DATABASE_URL` is unset. For Cockroach Cloud, paste the downloaded CA PEM into `DATABASE_CA_CERT` (Docker cannot see `~/.postgresql/root.crt` unless you mount it).
 
 Health / status:
 
@@ -106,7 +106,7 @@ Free web services spin down after idle time; the first request after that can be
 
 1. Connect GitHub repos `civicpulse-infra`, `civicpulse-server`, `civicpulse-ai-service`, `civicpulse-telephony-service`, and `civicpulse-notification-service` to Render.
 2. Create a Blueprint from this repo and `render.yaml`.
-3. When prompted, paste your PostGIS `DATABASE_URL`.
+3. When prompted, paste `DATABASE_URL` (Cockroach connection string with `sslmode=verify-full`) and `DATABASE_CA_CERT` (full contents of the downloaded `root.crt`, including `BEGIN`/`END` lines).
 4. After the first deploy, `GET https://<civicpulse-api>/v1/status` should report all six components.
 
 Region is `singapore`. Change it in `render.yaml` before the first sync if you want another region (it cannot be changed later).
