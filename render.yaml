@@ -58,32 +58,17 @@ services:
         fromService:
           name: civicpulse-ai
           type: web
-          property: host
-      - key: AI_HEALTH_PORT
-        fromService:
-          name: civicpulse-ai
-          type: web
-          property: port
+          envVarKey: RENDER_EXTERNAL_HOSTNAME
       - key: TELEPHONY_HEALTH_HOST
         fromService:
           name: civicpulse-telephony
           type: web
-          property: host
-      - key: TELEPHONY_HEALTH_PORT
-        fromService:
-          name: civicpulse-telephony
-          type: web
-          property: port
+          envVarKey: RENDER_EXTERNAL_HOSTNAME
       - key: NOTIFICATION_HEALTH_HOST
         fromService:
           name: civicpulse-notifications
           type: web
-          property: host
-      - key: NOTIFICATION_HEALTH_PORT
-        fromService:
-          name: civicpulse-notifications
-          type: web
-          property: port
+          envVarKey: RENDER_EXTERNAL_HOSTNAME
 
   - type: web
     runtime: docker

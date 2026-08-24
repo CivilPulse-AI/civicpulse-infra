@@ -6,12 +6,11 @@ This repo is the source of truth for:
 
 - Redis (local broker)
 - gRPC protobufs (`proto/`)
-- `docker compose` that builds the four sibling microservices
-- [`render.yaml`](render.yaml) Blueprint for deploying those services on Render
+- `docker compose` for running the sibling services locally
 
-Postgres / CockroachDB is **not** run here (locally or on Render). Set `DATABASE_URL` to your cluster URI.
+The database is not run here. Set `DATABASE_URL` to your cluster URI.
 
-CockroachDB Cloud requires its CA certificate. The Core API reads it from `DATABASE_CA_CERT` (PEM text, for Render) or `DATABASE_CA_CERT_PATH` (local file, usually `~/.postgresql/root.crt`). `CREATE EXTENSION postgis` is skipped on Cockroach; spatial `geography` columns are built-in.
+TLS-verified clusters (such as CockroachDB Cloud) need a CA. Core reads `DATABASE_CA_CERT` (PEM text) or `DATABASE_CA_CERT_PATH` (file, often `~/.postgresql/root.crt`). `CREATE EXTENSION postgis` is skipped when the engine does not support it; Cockroach has built-in `geography` types.
 
 Application code lives in the sibling repos. Generated gRPC stubs are committed inside those repos so they still build on their own. After changing a `.proto` file, regenerate with `make proto`.
 
@@ -88,25 +87,4 @@ Requires `protoc`, `protoc-gen-go`, `protoc-gen-go-grpc`, and `python3 -m grpc_t
 make proto
 ```
 
-## Render
-
-[`render.yaml`](render.yaml) deploys on Render **free** instance types:
-
-| Render resource | Type | Repo |
-| --- | --- | --- |
-| `civicpulse-api` | web | `CivilPulse-AI/civicpulse-server` |
-| `civicpulse-ai` | web | `CivilPulse-AI/civicpulse-ai-service` |
-| `civicpulse-telephony` | web | `CivilPulse-AI/civicpulse-telephony-service` |
-| `civicpulse-notifications` | web | `CivilPulse-AI/civicpulse-notification-service` |
-| `civicpulse-redis` | Key Value (free) | — |
-
-Private services, background workers, and Redis persistence are not available on the free plan. AI, telephony, and notifications are therefore free web services (they get public `onrender.com` URLs). Redis `persistenceMode` is `off`, so queued jobs are lost on restart.
-
-Free web services spin down after idle time; the first request after that can be slow, and `GET /v1/status` may show workers as down until they wake.
-
-1. Connect GitHub repos `civicpulse-infra`, `civicpulse-server`, `civicpulse-ai-service`, `civicpulse-telephony-service`, and `civicpulse-notification-service` to Render.
-2. Create a Blueprint from this repo and `render.yaml`.
-3. When prompted, paste `DATABASE_URL` (Cockroach connection string with `sslmode=verify-full`) and `DATABASE_CA_CERT` (full contents of the downloaded `root.crt`, including `BEGIN`/`END` lines).
-4. After the first deploy, `GET https://<civicpulse-api>/v1/status` should report all six components.
-
-Region is `singapore`. Change it in `render.yaml` before the first sync if you want another region (it cannot be changed later).
+Services are configured only through environment variables (`DATABASE_URL`, `REDIS_URL`, `PORT` / `HTTP_PORT`, health hosts, and so on). They do not assume a particular cloud. Optional provider files such as [`render.yaml`](render.yaml) can sit in this repo without leaking into application code.
