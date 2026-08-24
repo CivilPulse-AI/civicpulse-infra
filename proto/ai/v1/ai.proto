@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package ai.v1;
+
+option go_package = "github.com/CivilPulse-AI/civicpulse-server/internal/pb/ai/v1;aiv1";
+
+// AIEngine is the synchronous inference surface called by civicpulse-server.
+service AIEngine {
+  rpc Transcribe(TranscribeRequest) returns (TranscribeResponse);
+  rpc ExtractEntities(ExtractEntitiesRequest) returns (ExtractEntitiesResponse);
+  rpc AnalyzeReport(AnalyzeReportRequest) returns (AnalyzeReportResponse);
+}
+
+message TranscribeRequest {
+  bytes audio = 1;
+  string mime_type = 2;
+  string language_hint = 3;
+}
+
+message TranscribeResponse {
+  string text = 1;
+  string language = 2;
+}
+
+message ExtractEntitiesRequest {
+  string text = 1;
+  string locale = 2;
+}
+
+message ExtractEntitiesResponse {
+  string category = 1;
+  string severity = 2;
+  repeated string entities = 3;
+  string summary = 4;
+}
+
+message AnalyzeReportRequest {
+  string text = 1;
+  string category = 2;
+  double latitude = 3;
+  double longitude = 4;
+}
+
+message AnalyzeReportResponse {
+  bool crisis_detected = 1;
+  string summary = 2;
+  string recommended_action = 3;
+}

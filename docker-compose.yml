@@ -1,0 +1,105 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-civicpulse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-civicpulse}
+      POSTGRES_DB: ${POSTGRES_DB:-civicpulse}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - civicpulse_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-civicpulse} -d ${POSTGRES_DB:-civicpulse}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  ai:
+    build:
+      context: ../civicpulse-ai-service
+    ports:
+      - "${AI_HTTP_PORT:-8001}:8001"
+      - "${AI_GRPC_PORT:-50051}:50051"
+    environment:
+      HTTP_PORT: "8001"
+      GRPC_PORT: "50051"
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: civicpulse-ai-service
+      SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  server:
+    build:
+      context: ../civicpulse-server
+    ports:
+      - "${SERVER_HTTP_PORT:-8080}:8080"
+      - "${SERVER_GRPC_PORT:-9090}:9090"
+    environment:
+      HTTP_PORT: "8080"
+      GRPC_PORT: "9090"
+      DATABASE_URL: postgres://${POSTGRES_USER:-civicpulse}:${POSTGRES_PASSWORD:-civicpulse}@postgres:5432/${POSTGRES_DB:-civicpulse}?sslmode=disable
+      REDIS_URL: redis://redis:6379/0
+      AI_GRPC_ADDR: ai:50051
+      JWT_SECRET: ${JWT_SECRET:-dev-insecure-change-me}
+      SERVICE_NAME: civicpulse-server
+      SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ai:
+        condition: service_started
+    restart: unless-stopped
+
+  telephony:
+    build:
+      context: ../civicpulse-telephony-service
+    ports:
+      - "${TELEPHONY_HTTP_PORT:-8002}:8002"
+    environment:
+      HTTP_PORT: "8002"
+      REDIS_URL: redis://redis:6379/0
+      CORE_GRPC_ADDR: server:9090
+      SERVICE_NAME: civicpulse-telephony-service
+      SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
+    depends_on:
+      redis:
+        condition: service_healthy
+      server:
+        condition: service_started
+    restart: unless-stopped
+
+  notifications:
+    build:
+      context: ../civicpulse-notification-service
+    ports:
+      - "${NOTIFICATION_HTTP_PORT:-8003}:8003"
+    environment:
+      HTTP_PORT: "8003"
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_NAME: civicpulse-notification-service
+      SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  civicpulse_pg:
