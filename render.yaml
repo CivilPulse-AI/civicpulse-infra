@@ -1,0 +1,145 @@
+# yaml-language-server: $schema=https://render.com/schema/render.yaml.json
+#
+# CivicPulse AI — Render Blueprint (free instance types only)
+# Private services, background workers, and persistent Redis are paid-only,
+# so AI / telephony / notifications are free web services and Redis has no persistence.
+
+previews:
+  generation: off
+
+envVarGroups:
+  - name: civicpulse-shared
+    envVars:
+      - key: SERVICE_VERSION
+        value: "0.1.0"
+
+services:
+  - type: keyvalue
+    name: civicpulse-redis
+    region: singapore
+    plan: free
+    ipAllowList: []
+    maxmemoryPolicy: noeviction
+    persistenceMode: off
+
+  - type: web
+    runtime: docker
+    name: civicpulse-api
+    repo: https://github.com/CivilPulse-AI/civicpulse-server
+    region: singapore
+    plan: free
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - fromGroup: civicpulse-shared
+      - key: SERVICE_NAME
+        value: civicpulse-server
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GRPC_PORT
+        value: "9090"
+      - key: AI_GRPC_PORT
+        value: "50051"
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          name: civicpulse-redis
+          type: keyvalue
+          property: connectionString
+      - key: AI_GRPC_HOST
+        fromService:
+          name: civicpulse-ai
+          type: web
+          property: host
+      - key: AI_HEALTH_HOST
+        fromService:
+          name: civicpulse-ai
+          type: web
+          property: host
+      - key: AI_HEALTH_PORT
+        fromService:
+          name: civicpulse-ai
+          type: web
+          property: port
+      - key: TELEPHONY_HEALTH_HOST
+        fromService:
+          name: civicpulse-telephony
+          type: web
+          property: host
+      - key: TELEPHONY_HEALTH_PORT
+        fromService:
+          name: civicpulse-telephony
+          type: web
+          property: port
+      - key: NOTIFICATION_HEALTH_HOST
+        fromService:
+          name: civicpulse-notifications
+          type: web
+          property: host
+      - key: NOTIFICATION_HEALTH_PORT
+        fromService:
+          name: civicpulse-notifications
+          type: web
+          property: port
+
+  - type: web
+    runtime: docker
+    name: civicpulse-ai
+    repo: https://github.com/CivilPulse-AI/civicpulse-ai-service
+    region: singapore
+    plan: free
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - fromGroup: civicpulse-shared
+      - key: SERVICE_NAME
+        value: civicpulse-ai-service
+      - key: REDIS_URL
+        fromService:
+          name: civicpulse-redis
+          type: keyvalue
+          property: connectionString
+
+  - type: web
+    runtime: docker
+    name: civicpulse-telephony
+    repo: https://github.com/CivilPulse-AI/civicpulse-telephony-service
+    region: singapore
+    plan: free
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - fromGroup: civicpulse-shared
+      - key: SERVICE_NAME
+        value: civicpulse-telephony-service
+      - key: REDIS_URL
+        fromService:
+          name: civicpulse-redis
+          type: keyvalue
+          property: connectionString
+      - key: CORE_GRPC_HOST
+        fromService:
+          name: civicpulse-api
+          type: web
+          property: host
+      - key: CORE_GRPC_PORT
+        value: "9090"
+
+  - type: web
+    runtime: docker
+    name: civicpulse-notifications
+    repo: https://github.com/CivilPulse-AI/civicpulse-notification-service
+    region: singapore
+    plan: free
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - fromGroup: civicpulse-shared
+      - key: SERVICE_NAME
+        value: civicpulse-notification-service
+      - key: REDIS_URL
+        fromService:
+          name: civicpulse-redis
+          type: keyvalue
+          property: connectionString

@@ -7,6 +7,9 @@ This repo is the source of truth for:
 - Redis (local broker)
 - gRPC protobufs (`proto/`)
 - `docker compose` that builds the four sibling microservices
+- [`render.yaml`](render.yaml) Blueprint for deploying those services on Render
+
+Postgres is **not** run here (locally or on Render). Point `DATABASE_URL` at your external PostGIS instance.
 
 Postgres is **not** run here. Point `DATABASE_URL` at your external PostGIS instance.
 
@@ -84,3 +87,26 @@ Requires `protoc`, `protoc-gen-go`, `protoc-gen-go-grpc`, and `python3 -m grpc_t
 ```bash
 make proto
 ```
+
+## Render
+
+[`render.yaml`](render.yaml) deploys on Render **free** instance types:
+
+| Render resource | Type | Repo |
+| --- | --- | --- |
+| `civicpulse-api` | web | `CivilPulse-AI/civicpulse-server` |
+| `civicpulse-ai` | web | `CivilPulse-AI/civicpulse-ai-service` |
+| `civicpulse-telephony` | web | `CivilPulse-AI/civicpulse-telephony-service` |
+| `civicpulse-notifications` | web | `CivilPulse-AI/civicpulse-notification-service` |
+| `civicpulse-redis` | Key Value (free) | — |
+
+Private services, background workers, and Redis persistence are not available on the free plan. AI, telephony, and notifications are therefore free web services (they get public `onrender.com` URLs). Redis `persistenceMode` is `off`, so queued jobs are lost on restart.
+
+Free web services spin down after idle time; the first request after that can be slow, and `GET /v1/status` may show workers as down until they wake.
+
+1. Connect GitHub repos `civicpulse-infra`, `civicpulse-server`, `civicpulse-ai-service`, `civicpulse-telephony-service`, and `civicpulse-notification-service` to Render.
+2. Create a Blueprint from this repo and `render.yaml`.
+3. When prompted, paste your PostGIS `DATABASE_URL`.
+4. After the first deploy, `GET https://<civicpulse-api>/v1/status` should report all six components.
+
+Region is `singapore`. Change it in `render.yaml` before the first sync if you want another region (it cannot be changed later).
