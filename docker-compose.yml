@@ -1,21 +1,4 @@
 services:
-  postgres:
-    image: postgis/postgis:16-3.4
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-civicpulse}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-civicpulse}
-      POSTGRES_DB: ${POSTGRES_DB:-civicpulse}
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
-    volumes:
-      - civicpulse_pg:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-civicpulse} -d ${POSTGRES_DB:-civicpulse}"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    restart: unless-stopped
-
   redis:
     image: redis:7-alpine
     ports:
@@ -53,15 +36,16 @@ services:
     environment:
       HTTP_PORT: "8080"
       GRPC_PORT: "9090"
-      DATABASE_URL: postgres://${POSTGRES_USER:-civicpulse}:${POSTGRES_PASSWORD:-civicpulse}@postgres:5432/${POSTGRES_DB:-civicpulse}?sslmode=disable
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL to your external Postgres/PostGIS URI}
       REDIS_URL: redis://redis:6379/0
       AI_GRPC_ADDR: ai:50051
+      AI_HEALTH_URL: http://ai:8001/health
+      TELEPHONY_HEALTH_URL: http://telephony:8002/health
+      NOTIFICATION_HEALTH_URL: http://notifications:8003/health
       JWT_SECRET: ${JWT_SECRET:-dev-insecure-change-me}
       SERVICE_NAME: civicpulse-server
       SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_healthy
       ai:
@@ -100,6 +84,3 @@ services:
       redis:
         condition: service_healthy
     restart: unless-stopped
-
-volumes:
-  civicpulse_pg:
