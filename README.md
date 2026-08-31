@@ -7,6 +7,7 @@ This repo is the source of truth for:
 - Redis (local broker)
 - gRPC protobufs (`proto/`)
 - `docker compose` for running the sibling services locally
+- [`PLAN.md`](PLAN.md) — platform implementation checklist and roadmap
 
 The database is not run here. Set `DATABASE_URL` to your cluster URI.
 
@@ -17,6 +18,7 @@ Application code lives in the sibling repos. Generated gRPC stubs are committed 
 ## Layout
 
 ```
+PLAN.md
 proto/ai/v1/ai.proto       # AIEngine — implemented by civicpulse-ai-service
 proto/core/v1/core.proto   # CoreIngest — implemented by civicpulse-server
 docker-compose.yml
