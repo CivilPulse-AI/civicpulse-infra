@@ -13,16 +13,16 @@ proto-go:
 	PATH="$(CURDIR)/.tools:$(PATH)" protoc -I $(PROTO_DIR) \
 		--go_out=$(SERVER_DIR) --go_opt=module=github.com/CivilPulse-AI/civicpulse-server \
 		--go-grpc_out=$(SERVER_DIR) --go-grpc_opt=module=github.com/CivilPulse-AI/civicpulse-server \
-		$(PROTO_DIR)/ai/v1/ai.proto $(PROTO_DIR)/core/v1/core.proto
+		$(PROTO_DIR)/ai/v1/*.proto $(PROTO_DIR)/core/v1/*.proto
 
 proto-python:
 	mkdir -p $(AI_DIR)/app/pb $(TEL_DIR)/app/pb
 	$(PYTHON) -m grpc_tools.protoc -I $(PROTO_DIR) \
 		--python_out=$(AI_DIR)/app/pb --grpc_python_out=$(AI_DIR)/app/pb \
-		$(PROTO_DIR)/ai/v1/ai.proto
+		$(PROTO_DIR)/ai/v1/*.proto
 	$(PYTHON) -m grpc_tools.protoc -I $(PROTO_DIR) \
 		--python_out=$(TEL_DIR)/app/pb --grpc_python_out=$(TEL_DIR)/app/pb \
-		$(PROTO_DIR)/core/v1/core.proto
+		$(PROTO_DIR)/core/v1/*.proto
 	touch $(AI_DIR)/app/pb/__init__.py $(AI_DIR)/app/pb/ai/__init__.py $(AI_DIR)/app/pb/ai/v1/__init__.py
 	touch $(TEL_DIR)/app/pb/__init__.py $(TEL_DIR)/app/pb/core/__init__.py $(TEL_DIR)/app/pb/core/v1/__init__.py
 

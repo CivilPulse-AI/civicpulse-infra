@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package core.v1;
+
+option go_package = "github.com/CivilPulse-AI/civicpulse-server/internal/pb/core/v1;corev1";
+
+message IngestAck {
+  bool ok = 1;
+  string message = 2;
+}

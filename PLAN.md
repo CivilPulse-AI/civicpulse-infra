@@ -29,11 +29,11 @@ Repos that map to this stack:
 ### Phase 1: Core infrastructure, auth, and privacy foundation
 
 - [x] **Database and stack setup:** Initialize the PostgreSQL database with the PostGIS extension enabled. Set up the foundational Go Gin backend, the Python worker environment, and initialize two separate Flutter repositories (one for the Citizen App, one for the Institutional Web Portal).
-- [ ] **No live tracking logic:** Establish strict privacy-first location handlers at the OS level. The app must only request permission to fetch a one-time GPS coordinate when the user actively presses "Submit," with no background location tracking allowed.
-- [ ] **Regulatory data retention and security:** Implement database-level encryption at rest for sensitive user data. Create the API endpoints required for standard user data deletion flows to comply with GDPR/DPDP regulations.
-- [ ] **Platform-wide multilingualism:** Build the local UI translation infrastructure (e.g. Flutter l10n) so the app automatically adapts its display language based on the user's native device settings.
-- [ ] **Gated institutional onboarding:** Build the manual domain verification flow for B2G clients. Ensure there is no self-serve signup for institutions; admins must manually provision accounts after verifying `.gov` or official municipal email domains.
-- [ ] **Citizen authentication and home zones:** Implement Phone Number and OTP (One-Time Password) login for citizens. Following a successful login, mandate a mandatory onboarding step where the user drops a static "Home Zone" pin on the map to opt-in for localized surveys.
+- [x] **No live tracking logic:** Establish strict privacy-first location handlers at the OS level. The app must only request permission to fetch a one-time GPS coordinate when the user actively presses "Submit," with no background location tracking allowed.
+- [x] **Regulatory data retention and security:** Implement database-level encryption at rest for sensitive user data. Create the API endpoints required for standard user data deletion flows to comply with GDPR/DPDP regulations.
+- [x] **Platform-wide multilingualism:** Build the local UI translation infrastructure (e.g. Flutter l10n) so the app automatically adapts its display language based on the user's native device settings.
+- [x] **Gated institutional onboarding:** Build the manual domain verification flow for B2G clients. Ensure there is no self-serve signup for institutions; admins must manually provision accounts after verifying official municipal email domains. Operator UI is GoAdmin at `/admin` (separate framework DB + platform DB); `/v1/admin/*` remains for scripting.
+- [x] **Citizen authentication and home zones:** Implement Phone Number and OTP (One-Time Password) login for citizens. Following a successful login, mandate a mandatory onboarding step where the user drops a static "Home Zone" pin on the map to opt-in for localized surveys.
 
 ### Phase 2: Ingestion engine and community map (citizen app)
 

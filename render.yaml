@@ -36,6 +36,30 @@ services:
         value: civicpulse-server
       - key: JWT_SECRET
         generateValue: true
+      - key: DATA_ENCRYPTION_KEY
+        sync: false
+      - key: PII_HASH_SECRET
+        sync: false
+      - key: PLATFORM_ADMIN_KEY
+        sync: false
+      - key: INSTITUTION_EMAIL_DOMAINS
+        sync: false
+      - key: OTP_REVEAL
+        value: "false"
+      - key: GRPC_INGEST_TOKEN
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: OTP_SMS_ENABLED
+        value: "false"
+      - key: OTP_WHATSAPP_ENABLED
+        value: "false"
+      - key: FAST2SMS_API_KEY
+        sync: false
+      - key: FAST2SMS_WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: FAST2SMS_WHATSAPP_TEMPLATE
+        sync: false
       - key: GRPC_PORT
         value: "9090"
       - key: AI_GRPC_PORT
@@ -43,6 +67,10 @@ services:
       - key: DATABASE_URL
         sync: false
       - key: DATABASE_CA_CERT
+        sync: false
+      - key: GOADMIN_DATABASE_URL
+        sync: false
+      - key: GOADMIN_PASSWORD
         sync: false
       - key: REDIS_URL
         fromService:
@@ -112,6 +140,8 @@ services:
           property: host
       - key: CORE_GRPC_PORT
         value: "9090"
+      - key: GRPC_INGEST_TOKEN
+        sync: false
 
   - type: web
     runtime: docker

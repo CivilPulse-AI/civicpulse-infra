@@ -9,7 +9,7 @@ This repo is the source of truth for:
 - `docker compose` for running the sibling services locally
 - [`PLAN.md`](PLAN.md) — platform implementation checklist and roadmap
 
-The database is not run here. Set `DATABASE_URL` to your cluster URI.
+The database is not run here. Set `DATABASE_URL` (platform) and `GOADMIN_DATABASE_URL` (separate GoAdmin database on the same cluster).
 
 TLS-verified clusters (such as CockroachDB Cloud) need a CA. Core reads `DATABASE_CA_CERT` (PEM text) or `DATABASE_CA_CERT_PATH` (file, often `~/.postgresql/root.crt`). `CREATE EXTENSION postgis` is skipped when the engine does not support it; Cockroach has built-in `geography` types.
 
@@ -19,8 +19,14 @@ Application code lives in the sibling repos. Generated gRPC stubs are committed 
 
 ```
 PLAN.md
-proto/ai/v1/ai.proto       # AIEngine — implemented by civicpulse-ai-service
-proto/core/v1/core.proto   # CoreIngest — implemented by civicpulse-server
+proto/ai/v1/ai.proto           # AIEngine service
+proto/ai/v1/transcribe.proto
+proto/ai/v1/extract.proto
+proto/ai/v1/analyze.proto
+proto/core/v1/core.proto       # CoreIngest service
+proto/core/v1/survey.proto
+proto/core/v1/call.proto
+proto/core/v1/ack.proto
 docker-compose.yml
 ```
 
@@ -65,11 +71,11 @@ Typical `type` values: `deploy_survey`, `emergency_survey`, `notify`. Microservi
 ## Run the stack
 
 ```bash
-cp .env.example .env   # set DATABASE_URL and DATABASE_CA_CERT
+cp .env.example .env   # set DATABASE_URL, GOADMIN_DATABASE_URL, GOADMIN_PASSWORD, DATABASE_CA_CERT
 docker compose up --build
 ```
 
-Compose fails fast if `DATABASE_URL` is unset. For Cockroach Cloud, paste the downloaded CA PEM into `DATABASE_CA_CERT` (Docker cannot see `~/.postgresql/root.crt` unless you mount it).
+Compose fails fast if `DATABASE_URL`, `GOADMIN_DATABASE_URL`, `GOADMIN_PASSWORD`, `OTP_SMS_ENABLED`, or `OTP_WHATSAPP_ENABLED` is unset. For Cockroach Cloud, paste the downloaded CA PEM into `DATABASE_CA_CERT` (Docker cannot see `~/.postgresql/root.crt` unless you mount it).
 
 Health / status:
 

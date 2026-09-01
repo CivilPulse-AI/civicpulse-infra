@@ -4,33 +4,13 @@ package core.v1;
 
 option go_package = "github.com/CivilPulse-AI/civicpulse-server/internal/pb/core/v1;corev1";
 
+import "core/v1/ack.proto";
+import "core/v1/call.proto";
+import "core/v1/survey.proto";
+
 // CoreIngest is implemented by civicpulse-server. Workers push completed
 // background work here instead of talking to each other.
 service CoreIngest {
   rpc IngestSurveyResults(SurveyResultsRequest) returns (IngestAck);
   rpc IngestCallEvent(CallEventRequest) returns (IngestAck);
-}
-
-message SurveyResultsRequest {
-  string survey_id = 1;
-  string job_id = 2;
-  repeated SurveyAnswer answers = 3;
-}
-
-message SurveyAnswer {
-  string phone = 1;
-  string question_id = 2;
-  string value = 3;
-}
-
-message CallEventRequest {
-  string job_id = 1;
-  string phone = 2;
-  string status = 3;
-  string detail = 4;
-}
-
-message IngestAck {
-  bool ok = 1;
-  string message = 2;
 }

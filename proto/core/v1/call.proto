@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package core.v1;
+
+option go_package = "github.com/CivilPulse-AI/civicpulse-server/internal/pb/core/v1;corev1";
+
+message CallEventRequest {
+  string job_id = 1;
+  string phone = 2;
+  string status = 3;
+  string detail = 4;
+}

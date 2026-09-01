@@ -36,7 +36,9 @@ services:
     environment:
       HTTP_PORT: "8080"
       GRPC_PORT: "9090"
-      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL to your CockroachDB or Postgres URI}
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL to the platform Cockroach/Postgres database}
+      GOADMIN_DATABASE_URL: ${GOADMIN_DATABASE_URL:?Set GOADMIN_DATABASE_URL to a separate GoAdmin database (not DATABASE_URL)}
+      GOADMIN_PASSWORD: ${GOADMIN_PASSWORD:?Set GOADMIN_PASSWORD for the GoAdmin login}
       DATABASE_CA_CERT: ${DATABASE_CA_CERT:-}
       DATABASE_CA_CERT_PATH: ${DATABASE_CA_CERT_PATH:-}
       REDIS_URL: redis://redis:6379/0
@@ -44,9 +46,27 @@ services:
       AI_HEALTH_URL: http://ai:8001/health
       TELEPHONY_HEALTH_URL: http://telephony:8002/health
       NOTIFICATION_HEALTH_URL: http://notifications:8003/health
-      JWT_SECRET: ${JWT_SECRET:-dev-insecure-change-me}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET to a long random HMAC string}
+      DATA_ENCRYPTION_KEY: ${DATA_ENCRYPTION_KEY:?Set DATA_ENCRYPTION_KEY (16/24/32-byte AES key)}
+      PII_HASH_SECRET: ${PII_HASH_SECRET:-}
+      PLATFORM_ADMIN_KEY: ${PLATFORM_ADMIN_KEY:-}
+      INSTITUTION_EMAIL_DOMAINS: ${INSTITUTION_EMAIL_DOMAINS:-}
+      OTP_REVEAL: ${OTP_REVEAL:-false}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      GRPC_INGEST_TOKEN: ${GRPC_INGEST_TOKEN:?Set GRPC_INGEST_TOKEN for telephony ingest}
+      OTP_TTL_MINUTES: ${OTP_TTL_MINUTES:-5}
+      OTP_SMS_ENABLED: ${OTP_SMS_ENABLED:?Set OTP_SMS_ENABLED to true or false}
+      OTP_WHATSAPP_ENABLED: ${OTP_WHATSAPP_ENABLED:?Set OTP_WHATSAPP_ENABLED to true or false}
+      FAST2SMS_API_KEY: ${FAST2SMS_API_KEY:-}
+      FAST2SMS_WHATSAPP_PHONE_NUMBER_ID: ${FAST2SMS_WHATSAPP_PHONE_NUMBER_ID:-}
+      FAST2SMS_WHATSAPP_TEMPLATE: ${FAST2SMS_WHATSAPP_TEMPLATE:-}
+      FAST2SMS_WHATSAPP_LANGUAGE: ${FAST2SMS_WHATSAPP_LANGUAGE:-en_US}
+      FAST2SMS_WHATSAPP_VERSION: ${FAST2SMS_WHATSAPP_VERSION:-v26.0}
+      GOADMIN_STORE_PATH: /data/goadmin-uploads
       SERVICE_NAME: civicpulse-server
       SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
+    volumes:
+      - goadmin-uploads:/data/goadmin-uploads
     depends_on:
       redis:
         condition: service_healthy
@@ -63,6 +83,7 @@ services:
       HTTP_PORT: "8002"
       REDIS_URL: redis://redis:6379/0
       CORE_GRPC_ADDR: server:9090
+      GRPC_INGEST_TOKEN: ${GRPC_INGEST_TOKEN:?Set GRPC_INGEST_TOKEN for telephony ingest}
       SERVICE_NAME: civicpulse-telephony-service
       SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
     depends_on:
@@ -86,3 +107,6 @@ services:
       redis:
         condition: service_healthy
     restart: unless-stopped
+
+volumes:
+  goadmin-uploads:
