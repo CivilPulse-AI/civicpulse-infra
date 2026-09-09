@@ -22,6 +22,8 @@ services:
       REDIS_URL: redis://redis:6379/0
       SERVICE_NAME: civicpulse-ai-service
       SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:?Set GEMINI_API_KEY for transcription and translation}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
     depends_on:
       redis:
         condition: service_healthy
@@ -63,10 +65,20 @@ services:
       FAST2SMS_WHATSAPP_LANGUAGE: ${FAST2SMS_WHATSAPP_LANGUAGE:-en_US}
       FAST2SMS_WHATSAPP_VERSION: ${FAST2SMS_WHATSAPP_VERSION:-v26.0}
       GOADMIN_STORE_PATH: /data/goadmin-uploads
+      MEDIA_STORE_PATH: /data/media
+      MEDIA_PUBLIC_BASE_URL: ${MEDIA_PUBLIC_BASE_URL:-}
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID:-}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID:-}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY:-}
+      R2_BUCKET: ${R2_BUCKET:-}
+      R2_ENDPOINT: ${R2_ENDPOINT:-}
+      R2_REGION: ${R2_REGION:-auto}
+      R2_PUBLIC_BASE_URL: ${R2_PUBLIC_BASE_URL:-}
       SERVICE_NAME: civicpulse-server
       SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
     volumes:
       - goadmin-uploads:/data/goadmin-uploads
+      - report-media:/data/media
     depends_on:
       redis:
         condition: service_healthy
@@ -110,3 +122,4 @@ services:
 
 volumes:
   goadmin-uploads:
+  report-media:

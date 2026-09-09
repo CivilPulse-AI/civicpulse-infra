@@ -14,4 +14,6 @@ message ExtractEntitiesResponse {
   string severity = 2;
   repeated string entities = 3;
   string summary = 4;
+  string english_text = 5;
+  string payload_json = 6;
 }

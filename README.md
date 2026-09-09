@@ -23,6 +23,7 @@ proto/ai/v1/ai.proto           # AIEngine service
 proto/ai/v1/transcribe.proto
 proto/ai/v1/extract.proto
 proto/ai/v1/analyze.proto
+proto/ai/v1/anonymize.proto
 proto/core/v1/core.proto       # CoreIngest service
 proto/core/v1/survey.proto
 proto/core/v1/call.proto
@@ -75,7 +76,7 @@ cp .env.example .env   # set DATABASE_URL, GOADMIN_DATABASE_URL, GOADMIN_PASSWOR
 docker compose up --build
 ```
 
-Compose fails fast if `DATABASE_URL`, `GOADMIN_DATABASE_URL`, `GOADMIN_PASSWORD`, `OTP_SMS_ENABLED`, or `OTP_WHATSAPP_ENABLED` is unset. For Cockroach Cloud, paste the downloaded CA PEM into `DATABASE_CA_CERT` (Docker cannot see `~/.postgresql/root.crt` unless you mount it).
+Compose fails fast if `DATABASE_URL`, `GOADMIN_DATABASE_URL`, `GOADMIN_PASSWORD`, `GEMINI_API_KEY`, `OTP_SMS_ENABLED`, or `OTP_WHATSAPP_ENABLED` is unset. For Cockroach Cloud, paste the downloaded CA PEM into `DATABASE_CA_CERT` (Docker cannot see `~/.postgresql/root.crt` unless you mount it).
 
 Health / status:
 

@@ -72,6 +72,22 @@ services:
         sync: false
       - key: GOADMIN_PASSWORD
         sync: false
+      - key: MEDIA_STORE_PATH
+        value: /data/media
+      - key: R2_ACCOUNT_ID
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET
+        sync: false
+      - key: R2_ENDPOINT
+        sync: false
+      - key: R2_REGION
+        value: auto
+      - key: R2_PUBLIC_BASE_URL
+        sync: false
       - key: REDIS_URL
         fromService:
           name: civicpulse-redis
@@ -115,6 +131,10 @@ services:
           name: civicpulse-redis
           type: keyvalue
           property: connectionString
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: "gemini-2.0-flash"
 
   - type: web
     runtime: docker

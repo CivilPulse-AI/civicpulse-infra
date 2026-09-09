@@ -37,15 +37,15 @@ Repos that map to this stack:
 
 ### Phase 2: Ingestion engine and community map (citizen app)
 
-- [ ] **Intelligent offline queueing:** Implement robust structured local storage (using Flutter packages like Hive, Isar, or SQLite). If the device has no network, the app must save the complaint payload (media paths, text, coords) locally and use a background worker to sync it to the Go API once the internet is restored.
-- [ ] **Smart geotagging:** Build the logic to silently capture the exact latitude and longitude when the user opens the submission camera or starts typing. Include a manual map-pin fallback UI in case they are inside a concrete building with terrible GPS signal.
-- [ ] **Multimodal submission:** Build the frontend UI and backend API routes capable of handling `multipart/form-data` uploads for voice notes (`.m4a`/`.mp3`), photos, and raw text complaints.
-- [ ] **Real-time auto-translation:** Pipe incoming citizen voice notes and regional text through an LLM API. The backend must transcribe and translate everything into a standardized English JSON payload before saving it to PostgreSQL.
-- [ ] **Media anonymization:** Implement background scripts (potentially using OpenCV in Python) to detect and blur faces and license plates in uploaded citizen photos before they are served to the public map API.
-- [ ] **Spatial duplicate merging:** Write the PostGIS query logic (`ST_DWithin`) to detect if an incoming complaint lands within 10 meters of an active issue of the same category. If so, auto-merge them to prevent map clutter.
-- [ ] **One-tap verification (upvoting):** Build the public map UI allowing citizens to view nearby issues and tap an "Upvote/Verify" button. Wire this to the backend to dynamically increase the urgency score of that specific issue.
-- [ ] **Community context threads:** Enable a "reply" or "add context" feature where citizens can upload supplemental photos or text to an existing neighborhood issue created by someone else.
-- [ ] **Citizen anti-abuse (shadow-banning):** Build a trust-score algorithm. If a citizen's reports are repeatedly flagged as fake by municipal workers, lower their score. Below a certain threshold, flag their account so their future submissions are saved to the database but hidden from the public map.
+- [x] **Intelligent offline queueing:** Implement robust structured local storage (using Flutter packages like Hive, Isar, or SQLite). If the device has no network, the app must save the complaint payload (media paths, text, coords) locally and use a background worker to sync it to the Go API once the internet is restored.
+- [x] **Smart geotagging:** Build the logic to silently capture the exact latitude and longitude when the user opens the submission camera or starts typing. Include a manual map-pin fallback UI in case they are inside a concrete building with terrible GPS signal.
+- [x] **Multimodal submission:** Build the frontend UI and backend API routes capable of handling `multipart/form-data` uploads for voice notes (`.m4a`/`.mp3`), photos, and raw text complaints.
+- [x] **Real-time auto-translation:** Pipe incoming citizen voice notes and regional text through an LLM API. The backend must transcribe and translate everything into a standardized English JSON payload before saving it to PostgreSQL.
+- [x] **Media anonymization:** Implement background scripts (potentially using OpenCV in Python) to detect and blur faces and license plates in uploaded citizen photos before they are served to the public map API.
+- [x] **Spatial duplicate merging:** Write the PostGIS query logic (`ST_DWithin`) to detect if an incoming complaint lands within 10 meters of an active issue of the same category. If so, auto-merge them to prevent map clutter.
+- [x] **One-tap verification (upvoting):** Build the public map UI allowing citizens to view nearby issues and tap an "Upvote/Verify" button. Wire this to the backend to dynamically increase the urgency score of that specific issue.
+- [x] **Community context threads:** Enable a "reply" or "add context" feature where citizens can upload supplemental photos or text to an existing neighborhood issue created by someone else.
+- [x] **Citizen anti-abuse (shadow-banning):** Build a trust-score algorithm. If a citizen's reports are repeatedly flagged as fake by municipal workers, lower their score. Below a certain threshold, flag their account so their future submissions are saved to the database but hidden from the public map.
 
 ### Phase 3: Work orders, accountability, and resolution (B2G dashboards)
 
