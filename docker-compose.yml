@@ -74,6 +74,7 @@ services:
       R2_ENDPOINT: ${R2_ENDPOINT:-}
       R2_REGION: ${R2_REGION:-auto}
       R2_PUBLIC_BASE_URL: ${R2_PUBLIC_BASE_URL:-}
+      AUDIT_DELAY_HOURS: ${AUDIT_DELAY_HOURS:-24}
       SERVICE_NAME: civicpulse-server
       SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
     volumes:
@@ -115,6 +116,9 @@ services:
       REDIS_URL: redis://redis:6379/0
       SERVICE_NAME: civicpulse-notification-service
       SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
+      FCM_SERVER_KEY: ${FCM_SERVER_KEY:-}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY:-}
+      SENDGRID_FROM_EMAIL: ${SENDGRID_FROM_EMAIL:-}
     depends_on:
       redis:
         condition: service_healthy

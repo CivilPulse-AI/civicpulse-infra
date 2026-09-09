@@ -49,11 +49,11 @@ Repos that map to this stack:
 
 ### Phase 3: Work orders, accountability, and resolution (B2G dashboards)
 
-- [ ] **Smart ticket routing:** Use an LLM to categorize the translated complaint (e.g. "pipe burst" = Water Dept) and auto-route it to the appropriate institutional dashboard view.
-- [ ] **Live resolution tracking:** Set up the Go Notification Worker to push real-time FCM (Firebase Cloud Messaging) notifications to citizens when their ticket status changes to "Dispatched" or "Arrived."
-- [ ] **Proof of resolution:** Modify the institutional portal so that contractors or municipal workers cannot click "Resolve" without uploading a real-time, geo-tagged photo proving the fix.
-- [ ] **Institutional anti-abuse (resolution verification):** Build an automated push notification sent to the original reporting citizen 24 hours after a ticket is closed, asking, "Is this actually fixed?" to audit the contractor's honesty.
-- [ ] **The accountability chain (auto-escalation):** Implement strict SLA (Service Level Agreement) timers in the database. If a critical issue remains unresolved past its deadline, trigger a script to auto-generate an AI summary of the failure and email it to higher-level supervisors.
+- [x] **Smart ticket routing:** Use an LLM to categorize the translated complaint (e.g. "pipe burst" = Water Dept) and auto-route it to the appropriate institutional dashboard view.
+- [x] **Live resolution tracking:** Set up the Go Notification Worker to push real-time FCM (Firebase Cloud Messaging) notifications to citizens when their ticket status changes to "Dispatched" or "Arrived."
+- [x] **Proof of resolution:** Modify the institutional portal so that contractors or municipal workers cannot click "Resolve" without uploading a real-time, geo-tagged photo proving the fix.
+- [x] **Institutional anti-abuse (resolution verification):** Build an automated push notification sent to the original reporting citizen 24 hours after a ticket is closed, asking, "Is this actually fixed?" to audit the contractor's honesty.
+- [x] **The accountability chain (auto-escalation):** Implement strict SLA (Service Level Agreement) timers in the database. If a critical issue remains unresolved past its deadline, trigger a script to auto-generate an AI summary of the failure and email it to higher-level supervisors.
 
 ### Phase 4: Data seeding, surveys, and growth loop (telephony)
 
