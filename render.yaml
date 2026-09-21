@@ -98,6 +98,20 @@ services:
         sync: false
       - key: SURVEY_STARTER_CREDITS
         value: "5000"
+      - key: WORLDPOP_STATS_URL
+        value: https://api.worldpop.org/v1/services/stats
+      - key: WORLDPOP_API_KEY
+        sync: false
+      - key: ANOMALY_SCAN_MINUTES
+        value: "15"
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false
+      - key: RAZORPAY_CALLBACK_URL
+        sync: false
       - key: REDIS_URL
         fromService:
           name: civicpulse-redis

@@ -91,25 +91,25 @@ Survey credit burn (communicate this on the institution dashboard):
 
 ### Phase 5: B2G value adds (analytics and AI alerts)
 
-- [ ] **Institutional analytics:** Build the charting UI (using a Flutter charting library) on the dashboard to visualize average resolution times, volume of reports per ward, and SLA success rates.
-- [ ] **Automated budget exports:** Create backend functions to filter complaint data by date and severity, converting the output into downloadable CSV and formatted PDF reports to help planners justify repair budgets.
-- [ ] **Predictive deterioration heatmaps:** Build visual heatmap overlays on the dashboard map. Use historical complaint density to highlight areas predicted to suffer imminent infrastructure breakdowns.
-- [ ] **Socioeconomic equity overlays:** Integrate third-party census or demographic APIs to overlay income or demographic data onto the map, allowing planners to ensure equitable repair response times across different neighborhoods.
-- [ ] **Customizable executive digests:** Setup a Go cron job (scheduled worker) to compile weekly performance metrics into a summarized email or PDF, sending it automatically to registered city officials.
-- [ ] **Anomaly detection:** Deploy a continuous background AI agent to monitor the incoming stream of complaints for sudden, statistical spikes in specific categories within a small geographic radius.
-- [ ] **False-alarm cross-referencing:** Build a calendar module on the dashboard for planned maintenance (e.g. scheduled power outages). Hook the anomaly agent into this calendar to suppress alerts for known issues.
-- [ ] **Emergency verification protocol:** Enable the AI to autonomously deploy a localized in-app mock-dialer survey (Stencil, Relay, or Livewire) to residents in an anomaly zone to verify the severity of a crisis before human intervention. Same credit ledger and mode picker as Phase 4.
+- [x] **Institutional analytics:** Build the charting UI (using a Flutter charting library) on the dashboard to visualize average resolution times, volume of reports per ward, and SLA success rates.
+- [x] **Automated budget exports:** Create backend functions to filter complaint data by date and severity, converting the output into downloadable CSV and formatted PDF reports to help planners justify repair budgets.
+- [x] **Predictive deterioration heatmaps:** Build visual heatmap overlays on the dashboard map. Use historical complaint density to highlight areas predicted to suffer imminent infrastructure breakdowns.
+- [x] **Socioeconomic equity overlays:** Integrate third-party census or demographic APIs to overlay income or demographic data onto the map, allowing planners to ensure equitable repair response times across different neighborhoods.
+- [x] **Customizable executive digests:** Setup a Go cron job (scheduled worker) to compile weekly performance metrics into a summarized email or PDF, sending it automatically to registered city officials.
+- [x] **Anomaly detection:** Deploy a continuous background AI agent to monitor the incoming stream of complaints for sudden, statistical spikes in specific categories within a small geographic radius.
+- [x] **False-alarm cross-referencing:** Build a calendar module on the dashboard for planned maintenance (e.g. scheduled power outages). Hook the anomaly agent into this calendar to suppress alerts for known issues.
+- [x] **Emergency verification protocol:** Enable the AI to autonomously deploy a localized in-app mock-dialer survey (Stencil, Relay, or Livewire) to residents in an anomaly zone to verify the severity of a crisis before human intervention. Same credit ledger and mode picker as Phase 4.
 
 ### Phase 6: Gamification, monetization, and launch
 
-- [ ] **Citizen reputation scores:** Create a database column for "Civic Points." Award points programmatically when a user submits a report that gets officially verified and resolved, or when they upvote a valid issue.
-- [ ] **Citizen rewards integration:** Build a wallet/rewards UI in the mobile app where users can see their points and exchange them for digital badges (or potential future local perks).
-- [ ] **Institutional leaderboards:** Create a public-facing web route showing a ranked leaderboard of local municipal wards based on their average response times and SLA adherence.
-- [ ] **Transparency badges:** Automate the awarding of visual badges to institutions on the leaderboard if they maintain high resolution rates and zero SLA violations for a set period.
-- [ ] **Self-serve web billing:** Implement checkout on the web dashboard so municipalities can upgrade software tiers. Prefer Razorpay (UPI / INR) for Indian institutions; Stripe/RevenueCat remain optional for card billing.
-- [ ] **Automated tier entitlements:** Write the webhook logic so that successful payments instantly update the database to unlock Premium AI features or Analytics tabs without manual sales approval.
-- [ ] **Survey credit top-ups:** Pay-as-you-go UPI (Razorpay) wallet top-ups that refill the Phase 4 credit ledger (Stencil finalize, Relay per-turn, Livewire per-second).
-- [ ] **Premium SMS receipts (deferred channel):** Monetization toggle to send growth-loop SMS receipts to non-app users after a survey. Requires an outbound SMS provider; not part of the in-app mock dialer.
+- [x] **Citizen reputation scores:** Create a database column for "Civic Points." Award points programmatically when a user submits a report that gets officially verified and resolved, or when they upvote a valid issue.
+- [x] **Citizen rewards integration:** Build a wallet/rewards UI in the mobile app where users can see their points and exchange them for digital badges (or potential future local perks).
+- [x] **Institutional leaderboards:** Create a public-facing web route showing a ranked leaderboard of local municipal wards based on their average response times and SLA adherence.
+- [x] **Transparency badges:** Automate the awarding of visual badges to institutions on the leaderboard if they maintain high resolution rates and zero SLA violations for a set period.
+- [x] **Self-serve web billing:** Implement checkout on the web dashboard so municipalities can upgrade software tiers. Prefer Razorpay (UPI / INR) for Indian institutions; Stripe/RevenueCat remain optional for card billing.
+- [x] **Automated tier entitlements:** Write the webhook logic so that successful payments instantly update the database to unlock Premium AI features or Analytics tabs without manual sales approval.
+- [x] **Survey credit top-ups:** Pay-as-you-go UPI (Razorpay) wallet top-ups that refill the Phase 4 credit ledger (Stencil finalize, Relay per-turn, Livewire per-second).
+- [x] **Premium SMS receipts (deferred channel):** Monetization toggle to send growth-loop SMS receipts to non-app users after a survey. Requires an outbound SMS provider; not part of the in-app mock dialer.
 
 ## Potential feature suggestions (future expansion)
 
