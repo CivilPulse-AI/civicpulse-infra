@@ -90,6 +90,14 @@ services:
         sync: false
       - key: AUDIT_DELAY_HOURS
         value: "24"
+      - key: GOOGLE_MAPS_API_KEY
+        sync: false
+      - key: TELEPHONY_INTERNAL_URL
+        sync: false
+      - key: TELEPHONY_PUBLIC_WS_URL
+        sync: false
+      - key: SURVEY_STARTER_CREDITS
+        value: "5000"
       - key: REDIS_URL
         fromService:
           name: civicpulse-redis
@@ -137,6 +145,10 @@ services:
         sync: false
       - key: GEMINI_MODEL
         value: "gemini-2.0-flash"
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: GOOGLE_CLOUD_PROJECT
+        sync: false
 
   - type: web
     runtime: docker
@@ -163,6 +175,20 @@ services:
       - key: CORE_GRPC_PORT
         value: "9090"
       - key: GRPC_INGEST_TOKEN
+        sync: false
+      - key: CORE_HTTP_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: RELAY_MODEL
+        value: gemini-3.8-flash
+      - key: LIVE_MODEL
+        value: gemini-3.8-live
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: GOOGLE_CLOUD_PROJECT
         sync: false
 
   - type: web

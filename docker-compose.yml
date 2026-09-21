@@ -24,6 +24,9 @@ services:
       SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
       GEMINI_API_KEY: ${GEMINI_API_KEY:?Set GEMINI_API_KEY for transcription and translation}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${GOOGLE_SERVICE_ACCOUNT_JSON:-}
+      GOOGLE_SERVICE_ACCOUNT_JSON_B64: ${GOOGLE_SERVICE_ACCOUNT_JSON_B64:-}
+      GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT:-}
     depends_on:
       redis:
         condition: service_healthy
@@ -75,6 +78,10 @@ services:
       R2_REGION: ${R2_REGION:-auto}
       R2_PUBLIC_BASE_URL: ${R2_PUBLIC_BASE_URL:-}
       AUDIT_DELAY_HOURS: ${AUDIT_DELAY_HOURS:-24}
+      GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY:-}
+      TELEPHONY_INTERNAL_URL: http://telephony:8002
+      TELEPHONY_PUBLIC_WS_URL: ${TELEPHONY_PUBLIC_WS_URL:-ws://127.0.0.1:8002}
+      SURVEY_STARTER_CREDITS: ${SURVEY_STARTER_CREDITS:-5000}
       SERVICE_NAME: civicpulse-server
       SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
     volumes:
@@ -96,9 +103,20 @@ services:
       HTTP_PORT: "8002"
       REDIS_URL: redis://redis:6379/0
       CORE_GRPC_ADDR: server:9090
+      CORE_HTTP_URL: http://server:8080
       GRPC_INGEST_TOKEN: ${GRPC_INGEST_TOKEN:?Set GRPC_INGEST_TOKEN for telephony ingest}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET to a long random HMAC string}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:?Set GEMINI_API_KEY for transcription and translation}
+      RELAY_MODEL: ${RELAY_MODEL:-gemini-3.8-flash}
+      LIVE_MODEL: ${LIVE_MODEL:-gemini-3.8-live}
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${GOOGLE_SERVICE_ACCOUNT_JSON:-}
+      GOOGLE_SERVICE_ACCOUNT_JSON_B64: ${GOOGLE_SERVICE_ACCOUNT_JSON_B64:-}
+      GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT:-}
+      SURVEY_AUDIO_DIR: /data/survey-audio
       SERVICE_NAME: civicpulse-telephony-service
       SERVICE_VERSION: ${SERVICE_VERSION:-0.1.0}
+    volumes:
+      - survey-audio:/data/survey-audio
     depends_on:
       redis:
         condition: service_healthy
@@ -127,3 +145,4 @@ services:
 volumes:
   goadmin-uploads:
   report-media:
+  survey-audio:
