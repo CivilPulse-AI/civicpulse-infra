@@ -4,12 +4,11 @@ Local orchestration and shared contracts for CivicPulse AI.
 
 This repo is the source of truth for:
 
-- Redis (local broker)
 - gRPC protobufs (`proto/`)
 - `docker compose` for running the sibling services locally
 - [`PLAN.md`](PLAN.md) — platform implementation checklist and roadmap
 
-The database is not run here. Set `DATABASE_URL` (platform) and `GOADMIN_DATABASE_URL` (separate GoAdmin database on the same cluster).
+The database and Redis are not run here. Set `DATABASE_URL` (platform), `GOADMIN_DATABASE_URL` (separate GoAdmin database on the same cluster), and `REDIS_URL` (Upstash Redis URL, `rediss://`).
 
 TLS-verified clusters (such as CockroachDB Cloud) need a CA. Core reads `DATABASE_CA_CERT` (PEM text) or `DATABASE_CA_CERT_PATH` (file, often `~/.postgresql/root.crt`). `CREATE EXTENSION postgis` is skipped when the engine does not support it; Cockroach has built-in `geography` types.
 
@@ -42,7 +41,6 @@ Sibling services (expected next to this folder):
 
 | Service | HTTP | gRPC |
 | --- | --- | --- |
-| Redis | 6379 | — |
 | civicpulse-server | 8080 | 9090 |
 | civicpulse-ai-service | 8001 | 50051 |
 | civicpulse-telephony-service | 8002 (health only) | — |
@@ -72,11 +70,11 @@ Typical `type` values: `deploy_survey`, `emergency_survey`, `notify`. Microservi
 ## Run the stack
 
 ```bash
-cp .env.example .env   # set DATABASE_URL, GOADMIN_DATABASE_URL, GOADMIN_PASSWORD, DATABASE_CA_CERT
+cp .env.example .env   # set DATABASE_URL, GOADMIN_DATABASE_URL, GOADMIN_PASSWORD, DATABASE_CA_CERT, REDIS_URL
 docker compose up --build
 ```
 
-Compose fails fast if `DATABASE_URL`, `GOADMIN_DATABASE_URL`, `GOADMIN_PASSWORD`, `GEMINI_API_KEY`, `OTP_SMS_ENABLED`, or `OTP_WHATSAPP_ENABLED` is unset. For Cockroach Cloud, paste the downloaded CA PEM into `DATABASE_CA_CERT` (Docker cannot see `~/.postgresql/root.crt` unless you mount it).
+Compose fails fast if `DATABASE_URL`, `GOADMIN_DATABASE_URL`, `GOADMIN_PASSWORD`, `REDIS_URL`, `GEMINI_API_KEY`, `OTP_SMS_ENABLED`, or `OTP_WHATSAPP_ENABLED` is unset. For Cockroach Cloud, paste the downloaded CA PEM into `DATABASE_CA_CERT` (Docker cannot see `~/.postgresql/root.crt` unless you mount it).
 
 Health / status:
 

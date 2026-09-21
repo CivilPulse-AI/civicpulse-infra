@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=https://render.com/schema/render.yaml.json
 #
 # CivicPulse AI — Render Blueprint (free instance types only)
-# Private services, background workers, and persistent Redis are paid-only,
-# so AI / telephony / notifications are free web services and Redis has no persistence.
+# Private services and background workers are paid-only, so AI / telephony /
+# notifications are free web services. Redis is an external Upstash URL (REDIS_URL).
 
 previews:
   generation: off
@@ -14,14 +14,6 @@ envVarGroups:
         value: "0.1.0"
 
 services:
-  - type: keyvalue
-    name: civicpulse-redis
-    region: singapore
-    plan: free
-    ipAllowList: []
-    maxmemoryPolicy: noeviction
-    persistenceMode: off
-
   - type: web
     runtime: docker
     name: civicpulse-api
@@ -113,10 +105,7 @@ services:
       - key: RAZORPAY_CALLBACK_URL
         sync: false
       - key: REDIS_URL
-        fromService:
-          name: civicpulse-redis
-          type: keyvalue
-          property: connectionString
+        sync: false
       - key: AI_GRPC_HOST
         fromService:
           name: civicpulse-ai
@@ -151,10 +140,7 @@ services:
       - key: SERVICE_NAME
         value: civicpulse-ai-service
       - key: REDIS_URL
-        fromService:
-          name: civicpulse-redis
-          type: keyvalue
-          property: connectionString
+        sync: false
       - key: GEMINI_API_KEY
         sync: false
       - key: GEMINI_MODEL
@@ -177,10 +163,7 @@ services:
       - key: SERVICE_NAME
         value: civicpulse-telephony-service
       - key: REDIS_URL
-        fromService:
-          name: civicpulse-redis
-          type: keyvalue
-          property: connectionString
+        sync: false
       - key: CORE_GRPC_HOST
         fromService:
           name: civicpulse-api
@@ -218,10 +201,7 @@ services:
       - key: SERVICE_NAME
         value: civicpulse-notification-service
       - key: REDIS_URL
-        fromService:
-          name: civicpulse-redis
-          type: keyvalue
-          property: connectionString
+        sync: false
       - key: FCM_SERVER_KEY
         sync: false
       - key: SENDGRID_API_KEY
