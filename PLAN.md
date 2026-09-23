@@ -57,6 +57,7 @@ Repos that map to this stack:
 - [x] **Institution escalation ladder:** Institutions configure 1–5 levels (person or institution), each with designation, optional internal name, email, and notify-after hours. Level 1 fires after the work-SLA deadline (plus that level’s delay); higher levels fire after the previous notification plus their delay while the ticket stays open.
 - [x] **Citizen-visible accountability ladder:** Citizens see ladder length, designations, and notify-after hours on report detail — never emails or personal names — plus which level is current if escalated.
 - [x] **Portal Accountability settings:** Institution portal screen to edit the escalation ladder (dashboard destination alongside Surveys / Billing / Analytics).
+- [x] **Institution inbox, survey results, and crew:** Status and overdue filters, SLA and assignee on each ticket, map pin, context thread, and citizen audit outcome. Admins invite crew (same login); crew only see assigned tickets. Survey results show session counts and question prompts. Campaigns can be paused or archived.
 
 ### Phase 4: Data seeding, surveys, and in-app mock dialer
 
