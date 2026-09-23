@@ -90,6 +90,7 @@ Campaign modes (product names — use these in the dashboard, not "IVR / Basic /
 - [x] **Recorded answers on the transcript:** The citizen sees question/answer pairs plus the `editable_until` deadline, and can edit those answers while the window is open.
 - [x] **Citizen grievance shortcuts:** Home app bar links to My tickets and My surveys. Optional category chips on submit, open the new ticket after a successful send, and let the citizen move their home-zone pin later.
 - [x] **Citizen edit while open:** Author can change text, category, and pin until the institution marks the ticket dispatched; then only context threads remain.
+- [x] **Robustness limits:** Char caps on reports (2,000), context (1,000), and survey answers (500). Photo ≤5 × 8 MiB, voice ≤10 MiB. Stencil trees ≤40 nodes / 500 chars each. Call hard stops: Stencil 5 min, Relay 15 turns or 10 min, Livewire 5 min. LLM prompts truncated (8k) with output-token caps. Typical per-mode call lengths are estimated from tree/script size and shown on every campaign. Future survey generation must honor brief ≤1,500 chars, ≤12 questions / 20 nodes.
 
 Survey credit burn (communicate this on the institution dashboard):
 
