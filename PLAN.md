@@ -89,6 +89,7 @@ Campaign modes (product names — use these in the dashboard, not "IVR / Basic /
 - [x] **Survey hours screen:** Citizens set a daily open window (default 18:00–21:00 Asia/Kolkata, or any time). Incoming rings are suppressed outside that window; Available surveys stay reachable.
 - [x] **Recorded answers on the transcript:** The citizen sees question/answer pairs plus the `editable_until` deadline, and can edit those answers while the window is open.
 - [x] **Citizen grievance shortcuts:** Home app bar links to My tickets and My surveys. Optional category chips on submit, open the new ticket after a successful send, and let the citizen move their home-zone pin later.
+- [x] **Citizen edit while open:** Author can change text, category, and pin until the institution marks the ticket dispatched; then only context threads remain.
 
 Survey credit burn (communicate this on the institution dashboard):
 
