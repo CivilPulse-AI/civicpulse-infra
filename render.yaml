@@ -204,7 +204,13 @@ services:
         sync: false
       - key: FCM_SERVER_KEY
         sync: false
-      - key: SENDGRID_API_KEY
+      - key: BREVO_API_KEY
         sync: false
-      - key: SENDGRID_FROM_EMAIL
+      - key: BREVO_FROM_EMAIL
         sync: false
+      - key: BREVO_FROM_NAME
+        value: CivicPulse
+      - key: BREVO_TEMPLATE_SLA_ESCALATION
+        value: "5"
+      - key: BREVO_TEMPLATE_WEEKLY_DIGEST
+        value: "6"

@@ -86,6 +86,9 @@ Campaign modes (product names — use these in the dashboard, not "IVR / Basic /
 - [x] **Available surveys (home zone ∩ campaign region):** Citizens see active campaigns whose polygon covers their saved home zone, with **Take now** to start a session even outside their open window.
 - [x] **Citizen survey open window:** Citizens set a daily timezone + start/end window; incoming rings are suppressed outside that window. Unset window = always open. Available surveys remain reachable.
 - [x] **Citizen surveys hub:** My surveys shows Available + history, clearer labels, and the transcript edit deadline.
+- [x] **Survey hours screen:** Citizens set a daily open window (default 18:00–21:00 Asia/Kolkata, or any time). Incoming rings are suppressed outside that window; Available surveys stay reachable.
+- [x] **Recorded answers on the transcript:** The citizen sees question/answer pairs plus the `editable_until` deadline, and can edit those answers while the window is open.
+- [x] **Citizen grievance shortcuts:** Home app bar links to My tickets and My surveys. Optional category chips on submit, open the new ticket after a successful send, and let the citizen move their home-zone pin later.
 
 Survey credit burn (communicate this on the institution dashboard):
 
