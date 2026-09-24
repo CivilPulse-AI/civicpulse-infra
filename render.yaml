@@ -38,6 +38,8 @@ services:
         sync: false
       - key: OTP_REVEAL
         value: "false"
+      - key: HACKATHON_DEMO
+        value: "false"
       - key: GRPC_INGEST_TOKEN
         sync: false
       - key: CORS_ORIGINS

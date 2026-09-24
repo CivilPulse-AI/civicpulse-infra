@@ -122,6 +122,7 @@ Survey credit burn (communicate this on the institution dashboard):
 - [x] **Automated tier entitlements:** Write the webhook logic so that successful payments instantly update the database to unlock Premium AI features or Analytics tabs without manual sales approval.
 - [x] **Survey credit top-ups:** Pay-as-you-go UPI (Razorpay) wallet top-ups that refill the Phase 4 credit ledger (Stencil finalize, Relay per-turn, Livewire per-second).
 - [x] **Premium SMS receipts (deferred channel):** Monetization toggle to send growth-loop SMS receipts to non-app users after a survey. Requires an outbound SMS provider; not part of the in-app mock dialer.
+- [x] **Hackathon demo access (no live payments):** Live Razorpay is deferred for the hackathon. `HACKATHON_DEMO=true` seeds a citizen and institution admin with Premium + credits, exposes one-tap judge login, and hides Billing from the portal nav.
 
 ## Potential feature suggestions (future expansion)
 
