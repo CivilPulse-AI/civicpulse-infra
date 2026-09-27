@@ -4,7 +4,7 @@ AI_DIR := ../civicpulse-ai-service
 TEL_DIR := ../civicpulse-telephony-service
 PYTHON := $(if $(wildcard .venv/bin/python3),.venv/bin/python3,python3)
 
-.PHONY: proto proto-go proto-python up down logs local local-api local-down demo-on demo-off demo-status
+.PHONY: proto proto-go proto-python up down logs local local-api local-down demo-on demo-off demo-status demo-refresh
 
 proto: proto-go proto-python
 
@@ -52,3 +52,6 @@ demo-off:
 
 demo-status:
 	./scripts/demo.sh status
+
+demo-refresh:
+	./scripts/demo.sh refresh

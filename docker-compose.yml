@@ -81,6 +81,7 @@ services:
     volumes:
       - goadmin-uploads:/data/goadmin-uploads
       - report-media:/data/media
+      - ./ca.pem:/certs/ca.pem:ro
     depends_on:
       ai:
         condition: service_started
