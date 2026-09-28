@@ -4,7 +4,7 @@ AI_DIR := ../civicpulse-ai-service
 TEL_DIR := ../civicpulse-telephony-service
 PYTHON := $(if $(wildcard .venv/bin/python3),.venv/bin/python3,python3)
 
-.PHONY: proto proto-go proto-python up down logs
+.PHONY: proto proto-go proto-python up down logs local local-down demo-on demo-off demo-status
 
 proto: proto-go proto-python
 
@@ -34,3 +34,18 @@ down:
 
 logs:
 	docker compose logs -f
+
+local:
+	./scripts/local-up.sh
+
+local-down:
+	./scripts/local-down.sh
+
+demo-on:
+	./scripts/demo.sh on
+
+demo-off:
+	./scripts/demo.sh off
+
+demo-status:
+	./scripts/demo.sh status

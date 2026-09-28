@@ -6,3 +6,4 @@
 .tools/
 .venv/
 *.pem
+.local/
