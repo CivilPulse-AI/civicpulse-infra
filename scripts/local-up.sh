@@ -74,12 +74,10 @@ set -a
 source "$RUN/env"
 set +a
 
-if command -v fvm >/dev/null 2>&1; then
-  FLUTTER=(fvm flutter)
-elif command -v flutter >/dev/null 2>&1; then
+if command -v flutter >/dev/null 2>&1; then
   FLUTTER=(flutter)
 else
-  echo "flutter or fvm is not on PATH" >&2
+  echo "flutter is not on PATH" >&2
   exit 1
 fi
 
