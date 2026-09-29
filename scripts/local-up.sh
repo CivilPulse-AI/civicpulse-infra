@@ -153,7 +153,7 @@ launch notifications "$ROOT/civicpulse-notification-service" env HTTP_PORT=8003 
 
 echo "waiting for http://127.0.0.1:8080/health"
 ready=0
-for _ in $(seq 1 90); do
+for _ in $(seq 1 180); do
   if ! kill -0 "$SERVER_PID" 2>/dev/null; then
     break
   fi
