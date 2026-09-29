@@ -4,11 +4,17 @@
 # bill a small amount until the VM and civicpulse-ip are deleted.
 set -euo pipefail
 
-PROJECT="${CLOUDSDK_CORE_PROJECT:-civic-pulse-510013}"
+# Product id, not CLOUDSDK_CORE_PROJECT. That variable is shared with Prentline,
+# so inheriting it would point this script at the other GCP project.
+PROJECT="${CIVICPULSE_PROJECT:-civic-pulse-510013}"
 ZONE="${CIVICPULSE_ZONE:-asia-south1-a}"
 INSTANCE="${CIVICPULSE_INSTANCE:-civicpulse-demo}"
 API_URL="${CIVICPULSE_API_URL:-https://8.231.113.7.sslip.io}"
 PORTAL_URL="${CIVICPULSE_PORTAL_URL:-https://civic-pulse-510013.web.app}"
+
+env -u CLOUDSDK_CORE_PROJECT gcloud config set project "$PROJECT" >/dev/null
+export CLOUDSDK_CORE_PROJECT="$PROJECT"
+echo "CLI project: $PROJECT"
 
 deploy_portal() {
   local infra root portal
@@ -35,8 +41,10 @@ deploy_portal() {
     cd "$portal"
     "${flutter[@]}" build web --dart-define=API_BASE_URL="$API_URL"
     if command -v firebase >/dev/null 2>&1; then
+      firebase use "$PROJECT"
       firebase deploy --only hosting --project "$PROJECT"
     else
+      npx --yes firebase-tools use "$PROJECT"
       npx --yes firebase-tools deploy --only hosting --project "$PROJECT"
     fi
   )
