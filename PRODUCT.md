@@ -74,7 +74,7 @@ Most existing ideas stop at **intake**. CivicPulse is built as an **accountabili
 
 - Transcription, translation, entity extract, severity / department routing (Gemini)
 - Photo anonymization (faces / plates)
-- PostGIS duplicate merge and geofenced campaign targeting
+- Cloud SQL (PostGIS) duplicate merge and geofenced campaign targeting
 - Google Maps Geocoding for CSV addresses
 - Google Cloud Speech-to-Text / Text-to-Speech on Relay turns
 - Gemini Flash (Relay) and Gemini Live (Livewire) via Google ADK
@@ -185,10 +185,10 @@ flowchart TB
     notifSvc[Go_Notification_Service]
   end
 
-  subgraph data [Data]
-    pg[(PostgreSQL_PostGIS)]
-    redis[(Redis_Upstash)]
-    obj[(Object_Storage_R2_or_disk)]
+  subgraph data [Data_on_Google_Cloud]
+    pg[(Cloud_SQL_PostgreSQL_PostGIS)]
+    redis[(Memorystore_for_Redis)]
+    obj[(Cloud_Storage)]
   end
 
   subgraph google [Google_Cloud_and_Gemini]
@@ -249,12 +249,12 @@ Emphasis on **Google** stack for this Google-organized hackathon:
 | RPC contracts | **Protocol Buffers** + **gRPC** | AI and telephony ingest APIs |
 | Auth / crypto | JWT, AES phone encryption | Platform security |
 | API | Go (Gin), Python (FastAPI-style workers) | High-concurrency core + AI/telephony workers |
-| Data | PostgreSQL + **PostGIS** | Geospatial merge, home-zone eligibility, polygons |
-| Cache / jobs | Redis (Upstash) | Rate limits, queues |
-| Media | Local disk or R2-compatible object storage | Photos, baked Stencil audio |
+| Data | **Cloud SQL for PostgreSQL** with **PostGIS** | Managed civic database: duplicate merge, home-zone eligibility, campaign polygons |
+| Cache / jobs | **Memorystore for Redis** | Rate limits, survey and notification queues |
+| Media | **Cloud Storage** | Photos and baked Stencil audio |
 | Ops UI | GoAdmin | Platform provisioning of institutions / domains |
 
-Non-Google pieces that still matter: PostGIS for civic geography, Flutter’s offline/local queue, and (post-hackathon) UPI billing via Razorpay—**live payments are deferred for the hackathon**; demo institutions are seeded with Premium and survey credits.
+The data plane runs entirely on Google Cloud: Cloud SQL holds tickets, institutions, and geography; Memorystore carries rate limits and worker queues; Cloud Storage holds report photos and survey audio. Flutter’s on-device queue covers offline reports. **Live payments are deferred for the hackathon** (UPI via Razorpay is a later add-on); demo institutions are seeded with Premium and survey credits.
 
 ---
 
@@ -266,5 +266,58 @@ Non-Google pieces that still matter: PostGIS for civic geography, Flutter’s of
 - **Prompt-to-script / Genkit-style IVR generation** for institutions (future; Stencil editor ships today).
 - **Open data API**, contractor bidding marketplace, IoT ingest, grant-proposal assistant (roadmap ideas).
 - **Live Razorpay UPI** checkout and credit packs when production keys are configured.
+
+---
+
+## Implementation cost
+
+Region **Mumbai (`asia-south1`)**. Prices are public on-demand list rates, converted at **₹96.03 per USD** (rupee close, 28 Sep 2026). An Indian Cloud Billing account also pays **18% GST**. 730 hours is a full month. Re-check the [pricing calculator](https://cloud.google.com/products/calculator) before a procurement.
+
+### 1,000 consumers a month
+
+**About ₹16,000 per month**, GST included. That is about **₹16 per active citizen**.
+
+Load assumed for those 1,000 monthly active citizens:
+
+- About 200 new reports (one citizen in five files one). Each report is a few Gemini Flash calls for transcription, translation, extraction, and routing.
+- About 100 survey sessions, mostly Stencil and Relay, plus about 10 Livewire calls of roughly 3 minutes.
+- A few institution desks on the portal. The API and workers stay on all month, because survey and notification jobs wait on Redis.
+
+| Resource | Size for this load | INR / month |
+| --- | --- | ---: |
+| Compute Engine | 1× `e2-medium` (2 shared vCPU, 4 GB), on 24×7 | 2,867 |
+| Boot disk | 20 GB balanced | 230 |
+| Internet egress | About 10 GB | 115 |
+| Cloud SQL for PostgreSQL | Zonal, 1 vCPU, 3.75 GiB RAM, 20 GB SSD, PostGIS | 5,062 |
+| Memorystore for Redis | Basic tier, 1 GiB | 3,435 |
+| Cloud Storage | Photos and baked survey audio, about 10 GB plus a little egress | 288 |
+| Gemini | Reports, Relay, and the short Livewire calls above | 1,440 |
+| Maps Geocoding | Inside the $200 / month Maps credit | 0 |
+| Speech-to-Text and Text-to-Speech | Relay audio, inside the free minute and character tiers | 0 |
+| Firebase Hosting | Institution portal, inside the free tier | 0 |
+| **Usage** | | **13,437** |
+| GST 18% | | 2,419 |
+| **Monthly cost** | | **₹15,856** |
+
+Cloud SQL uses the published Enterprise on-demand rate (1 vCPU at $0.0413/hour, memory at $0.007/GiB-hour, SSD at about $0.17/GB-month). Memorystore Basic M1 is $0.049/GiB-hour. The instance is a single zone; a highly available pair is roughly double the database compute. Speech-to-Text above the free hour is about ₹1.50 per minute. One extra hour of Livewire audio is about ₹250–400.
+
+### Hackathon demo, per month right now
+
+**About ₹4,300 per month** while the demo VM stays on, GST included.
+
+This is the bill for the deployment used in judging: one `e2-medium` in Mumbai, its boot disk, a small Gemini allowance, and the institution portal on Firebase Hosting. Maps and Speech stay inside their free credits at demo volume.
+
+| Resource | Demo month | INR / month |
+| --- | --- | ---: |
+| Compute Engine | 1× `e2-medium`, on 24×7 | 2,868 |
+| Persistent disk | 20 GB balanced | 230 |
+| Internet egress | A few GB | 48 |
+| Gemini | Reports, Relay, about 15 short Livewire calls | 480 |
+| Maps, Speech, Firebase Hosting | Inside free tiers and the Maps credit | 0 |
+| **Usage** | | **3,626** |
+| GST 18% | | 653 |
+| **Deducted** | | **₹4,300** |
+
+A new billing account’s **$300 / 90-day credit** covers the demo for several months. The ₹4,300 figure is the amount after that credit is gone. Stopping the VM stops the compute charge; the disk and a reserved address still bill until they are deleted.
 
 CivicPulse’s north star remains the same after the hackathon: **every civic claim ends in a verified outcome or an escalated explanation**—not an ignored ticket.
