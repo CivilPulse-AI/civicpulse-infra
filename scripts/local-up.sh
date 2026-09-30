@@ -6,7 +6,11 @@ set -euo pipefail
 INFRA="$(cd "$(dirname "$0")/.." && pwd)"
 ROOT="$(cd "$INFRA/.." && pwd)"
 RUN="$INFRA/.local"
-mkdir -p "$RUN/logs"
+# /tmp is a RAM-backed tmpfs with a user quota; go run and the Flutter compiler overflow it.
+# Keep the path short: Chrome puts a Unix socket in TMPDIR and those are capped at 108 bytes.
+TMP_ROOT="$HOME/.cache/cp-tmp/infra"
+mkdir -p "$RUN/logs" "$TMP_ROOT"
+export TMPDIR="$TMP_ROOT"
 
 if [[ -f "$RUN/pids" ]]; then
   echo "Local stack is already running. Stop it with Ctrl+C in that terminal, or: make local-down" >&2
@@ -74,7 +78,11 @@ set -a
 source "$RUN/env"
 set +a
 
-if command -v flutter >/dev/null 2>&1; then
+# The snap wrapper exports SNAP, which makes Chrome segfault when flutter launches it;
+# the snap's SDK binary runs the same Flutter without that environment.
+if [[ "$(command -v flutter)" == /snap/bin/flutter && -x "$HOME/snap/flutter/common/flutter/bin/flutter" ]]; then
+  FLUTTER=("$HOME/snap/flutter/common/flutter/bin/flutter")
+elif command -v flutter >/dev/null 2>&1; then
   FLUTTER=(flutter)
 else
   echo "flutter is not on PATH" >&2
@@ -115,6 +123,7 @@ cleanup() {
     done <"$RUN/pids"
     rm -f "$RUN/pids"
   fi
+  rm -rf "$TMP_ROOT"
 }
 trap 'cleanup; exit 130' INT
 trap 'cleanup; exit 143' TERM
@@ -172,10 +181,16 @@ echo "GoAdmin    http://127.0.0.1:8080/admin"
 echo "Portal     Chrome, API http://127.0.0.1:8080"
 echo "Surveys    ws://127.0.0.1:8002"
 echo
-echo "Citizen app (phone or emulator), in another terminal:"
-echo "  cd $ROOT/civicpulse-citizen-app"
-echo "  ${FLUTTER[*]} run --dart-define=API_BASE_URL=http://127.0.0.1:8080"
+echo "Citizen app (USB phone via adb reverse, or emulator), in another terminal:"
+echo "  cd $ROOT/civicpulse-citizen-app && scripts/run-android.sh"
 echo
+
+if [[ "${NO_PORTAL:-0}" == 1 ]]; then
+  echo "Portal skipped (NO_PORTAL=1). Ctrl+C stops the backends."
+  wait
+  exit 0
+fi
+
 echo "This terminal stays attached. Ctrl+C stops the portal and the backends."
 
 cd "$ROOT/civicpulse-institution-portal"

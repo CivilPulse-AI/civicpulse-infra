@@ -15,7 +15,7 @@ if [[ -f "$PIDS" ]]; then
   rm -f "$PIDS"
 fi
 
-# go run detaches the binary under /tmp/go-build, so a failed start can
+# go run detaches the binary under $TMPDIR/go-build, so a failed start can
 # leave the API listening after the pid file is already gone.
 for port in 8001 8002 8003 8080 9090 50051; do
   while read -r pid; do
@@ -29,6 +29,8 @@ for port in 8001 8002 8003 8080 9090 50051; do
     stopped=1
   done < <(ss -ltnpH "sport = :$port" 2>/dev/null | sed -n 's/.*pid=\([0-9]*\).*/\1/p' | sort -u)
 done
+
+rm -rf "$HOME/.cache/cp-tmp/infra"
 
 if [[ "$stopped" == 1 ]]; then
   echo "Stopped local stack."
