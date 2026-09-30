@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package ai.v1;
+
+option go_package = "github.com/CivilPulse-AI/civicpulse-server/internal/pb/ai/v1;aiv1";
+
+message MapContactColumnsRequest {
+  string sample = 1;
+  string note = 2;
+}
+
+message MapContactColumnsResponse {
+  int32 phone = 1;
+  int32 name = 2;
+  int32 address = 3;
+  int32 lat = 4;
+  int32 lng = 5;
+  int32 lat_lng = 6;
+}

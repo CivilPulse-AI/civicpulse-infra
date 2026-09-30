@@ -6,6 +6,7 @@ option go_package = "github.com/CivilPulse-AI/civicpulse-server/internal/pb/ai/v
 
 import "ai/v1/analyze.proto";
 import "ai/v1/anonymize.proto";
+import "ai/v1/columns.proto";
 import "ai/v1/extract.proto";
 import "ai/v1/transcribe.proto";
 
@@ -15,4 +16,5 @@ service AIEngine {
   rpc ExtractEntities(ExtractEntitiesRequest) returns (ExtractEntitiesResponse);
   rpc AnalyzeReport(AnalyzeReportRequest) returns (AnalyzeReportResponse);
   rpc AnonymizeImage(AnonymizeImageRequest) returns (AnonymizeImageResponse);
+  rpc MapContactColumns(MapContactColumnsRequest) returns (MapContactColumnsResponse);
 }
