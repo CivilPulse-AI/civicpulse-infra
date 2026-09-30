@@ -2,13 +2,11 @@
 
 ## Brief about the solution
 
-**CivicPulse AI** is a privacy-first civic engagement platform that connects citizens and municipal institutions around local infrastructure problems.
+CivicPulse AI connects residents and city governments around local infrastructure. A resident reports a broken road, a water cut, or a missed waste pickup with text, a photo, or a voice note. Gemini turns that input into a structured ticket, routes it to the right department, and merges nearby duplicates on a community map. Location is shared only when the resident chooses to.
 
-Citizens report issues with text, voice, or photos from a Flutter app—location is captured only when they act, never as background tracking. AI turns messy multilingual input into structured English tickets, routes them by department, and merges nearby duplicates on a community map.
+Cities work from a gated web portal. Staff assign a crew, and a ticket closes only with a photo taken at the site. The original reporter is then asked whether the fix is real. If the deadline passes, the issue climbs an escalation ladder the city configured. The same portal runs geofenced voice surveys in the citizen app: Stencil is a keypad script, Relay is turn-by-turn, and Livewire is a live conversation. Gemini, Cloud Speech, Google Maps, and Firebase Hosting provide understanding, voice, place, and the portal.
 
-Institutions work from a gated web portal: SLA-backed work orders, geo-tagged proof of resolution, citizen confirmation audits, escalation ladders, and geofenced **in-app voice surveys** (Stencil / Relay / Livewire) powered by Google Gemini—without PSTN carrier setup for the hackathon demo.
-
-The product closes the loop that most complaint apps leave open: report → dispatch → prove the fix → ask the citizen if it is actually fixed → escalate when SLA slips.
+The loop is report, dispatch, prove the fix, confirm with the citizen, and escalate when the deadline slips.
 
 ---
 
