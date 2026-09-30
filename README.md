@@ -6,6 +6,8 @@ A resident reports a broken road, a water cut, or a missed waste pickup with tex
 
 Location is taken only when the person acts. The app does not follow anyone in the background. A resident sets a home area once, and that is what makes them eligible for a local survey.
 
+The municipal portal is live at [https://civic-pulse-510013.web.app](https://civic-pulse-510013.web.app).
+
 **The platform spans several repositories.** Each one is a piece of the same product. This repository, `civicpulse-infra`, is the shared home for how those pieces fit together.
 
 ## Repositories
@@ -13,7 +15,7 @@ Location is taken only when the person acts. The app does not follow anyone in t
 | Repository | What it is |
 | --- | --- |
 | [civicpulse-citizen-app](https://github.com/CivilPulse-AI/civicpulse-citizen-app) | The mobile app for residents. Reports, the neighbourhood map, and incoming survey calls. |
-| [civicpulse-institution-portal](https://github.com/CivilPulse-AI/civicpulse-institution-portal) | The web portal for a municipality. Inbox, crews, deadlines, and survey campaigns. |
+| [civicpulse-institution-portal](https://github.com/CivilPulse-AI/civicpulse-institution-portal) | The web portal for a municipality. Inbox, crews, deadlines, and survey campaigns. Live at [civic-pulse-510013.web.app](https://civic-pulse-510013.web.app). |
 | [civicpulse-server](https://github.com/CivilPulse-AI/civicpulse-server) | The core of the platform. Accounts, tickets, campaigns, and the record of what happened. |
 | [civicpulse-ai-service](https://github.com/CivilPulse-AI/civicpulse-ai-service) | Reads a complaint and turns it into a clear ticket: language, category, and which department should own it. |
 | [civicpulse-telephony-service](https://github.com/CivilPulse-AI/civicpulse-telephony-service) | Runs the voice surveys: a keypad script, a turn-by-turn conversation, or a live conversation. |
@@ -56,4 +58,4 @@ CivicPulse is built on Google’s tools, from the apps people touch to the intel
 
 **Google Maps** places things in the city. A PIN code, a street address, or a list of contacts becomes a point on the map, and a campaign only reaches people whose home area falls inside the shape the city drew.
 
-**Firebase** carries the municipal portal to the web, and is how residents are told that a crew was dispatched, that a fix needs their confirmation, or that a deadline has moved up the ladder.
+**Firebase Hosting** serves the municipal portal at [civic-pulse-510013.web.app](https://civic-pulse-510013.web.app). Firebase is also how residents are told that a crew was dispatched, that a fix needs their confirmation, or that a deadline has moved up the ladder.
